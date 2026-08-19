@@ -29,11 +29,16 @@ const all = (await getCollection("posts"))
 
 <style>
   .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
-  .list li {
-    padding: 16px 4px; border-bottom: 1px solid var(--border);
+  .list li { padding: 16px 4px; border-bottom: 1px solid var(--border); opacity: 0; animation: fadeUp .45s ease forwards; }
+    .list li:nth-child(1) { animation-delay: .05s; }
+    .list li:nth-child(2) { animation-delay: .12s; }
+    .list li:nth-child(3) { animation-delay: .19s; }
+    .list li:nth-child(4) { animation-delay: .26s; }
+    .list li:nth-child(5) { animation-delay: .33s; }
+    .list li:nth-child(n+6) { animation-delay: .4s; }
   }
   .list li:last-child { border-bottom: none; }
-  .title { font-size: 18px; font-weight: 600; color: var(--text); }
+  .title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: .2px; }
   .title:hover { color: var(--accent); text-decoration: none; }
   .meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .date { color: var(--muted); font-size: 13px; }

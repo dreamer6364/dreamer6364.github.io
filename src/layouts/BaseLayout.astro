@@ -8,7 +8,7 @@ const { title = "我的笔记", description = "我的笔记" } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <title>{title}</title>
   </head>
   <body>
@@ -55,7 +55,8 @@ const { title = "我的笔记", description = "我的笔记" } = Astro.props;
       nav a { color: var(--muted); font-size: 14px; }
       nav a:hover { color: var(--text); text-decoration: none; }
 
-      .wrap { max-width: var(--max); margin: 0 auto; padding: 36px 20px 64px; }
+      .wrap { max-width: var(--max); margin: 0 auto; padding: 36px 20px 64px; animation: fadeUp .5s ease both; }
+      @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
       .prose { font-size: 16px; }
       .prose :global(h2) { margin-top: 28px; font-size: 20px; }
