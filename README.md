@@ -1,43 +1,59 @@
-# Astro Starter Kit: Minimal
+# 我的笔记（Astro 极简站）
 
-```sh
-npm create astro@latest -- --template minimal
+用 [Astro](https://astro.build) 搭的**本地优先** Markdown 笔记站，已发布到 https://dreamer6364.github.io/ 。
+极简排版：只有「笔记列表 / 标签」，每条笔记显示 标题 + 日期 + 标签。
+
+## 怎么写笔记
+
+1. 打开 `src/content/posts/`
+2. 新建一个 `.md` 文件（直接平铺，不用建子文件夹），按下面格式写：
+
+```md
+---
+title: 文章标题
+date: "2026-08-19"      ← 注意日期必须加英文引号
+tags: ["标签1", "标签2"]
+---
+
+# 正文大标题
+
+这里写内容，支持 Markdown：**加粗**、`代码`、列表、表格、代码块等。
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+3. 本地预览：在项目根目录运行 `npm run dev`，打开 http://localhost:4321/
+4. 发布到线上（让别人也能看）：
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+git add -A
+git commit -m "写了一条笔记"
+git push
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+等一两分钟，GitHub Actions 会自动重新部署，线上 https://dreamer6364.github.io/ 就更新了。
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## 目录结构
 
-Any static assets, like images, can be placed in the `public/` directory.
+```
+src/
+  content.config.ts     # 笔记集合配置（title/date/tags）
+  content/posts/        # ← 你写笔记的地方，每篇一个 .md
+  layouts/BaseLayout.astro
+  pages/
+    index.astro         # 笔记列表（首页）
+    blog/[...id].astro  # 文章详情
+    tags/index.astro    # 标签云
+    tags/[tag].astro    # 单个标签下的笔记
+```
 
-## 🧞 Commands
+## 常用命令
 
-All commands are run from the root of the project, from a terminal:
+| 命令 | 作用 |
+| --- | --- |
+| `npm run dev` | 本地预览（http://localhost:4321） |
+| `npm run build` | 生成静态站点到 `dist/` |
+| `git push` | 发布到线上 |
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## 注意
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- `date` 字段必须写成字符串 `"2026-08-19"`（带引号），否则构建报错。
+- 笔记都是纯 `.md` 文本，永不锁定在某个软件里。
