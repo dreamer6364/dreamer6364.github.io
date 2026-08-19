@@ -1,7 +1,7 @@
 # 我的笔记（Astro 极简站）
 
 用 [Astro](https://astro.build) 搭的**本地优先** Markdown 笔记站，已发布到 https://dreamer6364.github.io/ 。
-极简排版：只有「笔记列表 / 标签」，每条笔记显示 标题 + 日期 + 标签。
+
 
 ## 怎么写笔记
 
