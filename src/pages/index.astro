@@ -2,57 +2,40 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("posts")).filter((p) => !p.data.draft);
-const cats = [...new Set(posts.map((p) => p.data.category))];
-const latest = [...posts].sort((a, b) => b.data.date.localeCompare(a.data.date)).slice(0, 6);
+const all = (await getCollection("posts"))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.localeCompare(a.data.date));
 ---
 
 <BaseLayout title="我的笔记">
-  <section class="intro">
-    <h1>我的笔记</h1>
-    <p>一个用 Astro 搭建的本地优先 Markdown 笔记站。当前共 {posts.length} 篇，{cats.length} 个分类。</p>
-  </section>
-
-  {cats.length > 0 && (
-    <section class="block">
-      <h2>分类</h2>
-      <div class="chips">
-        {cats.map((c) => (
-          <a class="pill" href={`/blog?cat=${encodeURIComponent(c)}`}>{c}</a>
-        ))}
-      </div>
-    </section>
+  {all.length === 0 ? (
+    <p class="empty">还没有笔记。去 <code>src/content/posts/</code> 放一篇 <code>.md</code> 即可。</p>
+  ) : (
+    <ul class="list">
+      {all.map((p) => (
+        <li>
+          <a class="title" href={`/blog/${p.id}`}>{p.data.title}</a>
+          <div class="meta">
+            <span class="date">{p.data.date}</span>
+            {p.data.tags?.length ? (
+              <span class="tags">{p.data.tags.map((t) => <a class="pill" href={`/tags/${encodeURIComponent(t)}`}>#{t}</a>)}</span>
+            ) : null}
+          </div>
+        </li>
+      ))}
+    </ul>
   )}
-
-  <section class="block">
-    <h2>最新笔记</h2>
-    {latest.length === 0 ? (
-      <p class="empty">还没有笔记。去 <code>src/content/posts/</code> 按分类建文件夹，放一篇 <code>.md</code> 即可。</p>
-    ) : (
-      <ul class="list">
-        {latest.map((p) => (
-          <li>
-            <a href={`/blog/${p.id}`}>{p.data.title}</a>
-            <span class="meta">{p.data.date} · {p.data.category}</span>
-          </li>
-        ))}
-      </ul>
-    )}
-  </section>
 </BaseLayout>
 
 <style>
-  .intro h1 { font-size: 34px; margin: 0 0 8px; }
-  .intro p { color: var(--muted); margin: 0 0 8px; }
-  .block { margin-top: 36px; }
-  .block h2 { font-size: 20px; margin: 0 0 14px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
   .list li {
-    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 14px 18px; flex-wrap: wrap;
+    padding: 16px 4px; border-bottom: 1px solid var(--border);
   }
-  .list a { font-weight: 600; }
-  .list .meta { color: var(--muted); font-size: 13px; }
+  .list li:last-child { border-bottom: none; }
+  .title { font-size: 18px; font-weight: 600; color: var(--text); }
+  .title:hover { color: var(--accent); text-decoration: none; }
+  .meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .date { color: var(--muted); font-size: 13px; }
+  .tags { display: inline-flex; gap: 6px; flex-wrap: wrap; }
 </style>

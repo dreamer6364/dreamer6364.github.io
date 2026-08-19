@@ -19,26 +19,26 @@ export async function getStaticPaths() {
 const { tag, posts } = Astro.props;
 ---
 
-<BaseLayout title={`#${tag} · 标签`}>
-  <h1>#{tag}</h1>
-  <p class="count">{posts.length} 篇</p>
+<BaseLayout title={`#${tag}`}>
+  <h1 class="tag">#{tag}</h1>
   <ul class="list">
     {posts.map((p) => (
-      <li><a href={`/blog/${p.id}`}>
-        <span class="t">{p.data.title}</span>
-        <span class="m">{p.data.date} · {p.data.category}</span>
-      </a></li>
+      <li>
+        <a class="title" href={`/blog/${p.id}`}>{p.data.title}</a>
+        <div class="meta"><span class="date">{p.data.date}</span></div>
+      </li>
     ))}
   </ul>
-  <p style="margin-top:32px"><a href="/tags">← 全部标签</a></p>
+  <p style="margin-top:28px"><a href="/tags">← 全部标签</a></p>
 </BaseLayout>
 
 <style>
-  h1 { font-size: 30px; margin: 0 0 4px; }
-  .count { color: var(--muted); margin: 0 0 18px; }
-  .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-  .list a { display: grid; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; color: var(--text); }
-  .list a:hover { text-decoration: none; border-color: var(--accent); }
-  .list .t { font-size: 17px; font-weight: 700; }
-  .list .m { color: var(--muted); font-size: 13px; }
+  .tag { font-size: 24px; margin: 0 0 16px; }
+  .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  .list li { padding: 14px 4px; border-bottom: 1px solid var(--border); }
+  .list li:last-child { border-bottom: none; }
+  .title { font-size: 17px; font-weight: 600; color: var(--text); }
+  .title:hover { color: var(--accent); text-decoration: none; }
+  .meta { margin-top: 5px; }
+  .date { color: var(--muted); font-size: 13px; }
 </style>
