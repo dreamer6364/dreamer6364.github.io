@@ -1,0 +1,44 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((p) => (p.data.tags ?? []).includes(tag))
+        .sort((a, b) => b.data.date.localeCompare(a.data.date)),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag} · 标签`}>
+  <h1>#{tag}</h1>
+  <p class="count">{posts.length} 篇</p>
+  <ul class="list">
+    {posts.map((p) => (
+      <li><a href={`/blog/${p.id}`}>
+        <span class="t">{p.data.title}</span>
+        <span class="m">{p.data.date} · {p.data.category}</span>
+      </a></li>
+    ))}
+  </ul>
+  <p style="margin-top:32px"><a href="/tags">← 全部标签</a></p>
+</BaseLayout>
+
+<style>
+  h1 { font-size: 30px; margin: 0 0 4px; }
+  .count { color: var(--muted); margin: 0 0 18px; }
+  .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .list a { display: grid; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; color: var(--text); }
+  .list a:hover { text-decoration: none; border-color: var(--accent); }
+  .list .t { font-size: 17px; font-weight: 700; }
+  .list .m { color: var(--muted); font-size: 13px; }
+</style>

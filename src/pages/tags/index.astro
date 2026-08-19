@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("posts")).filter((p) => !p.data.draft);
+const tagMap = new Map<string, number>();
+for (const p of posts) for (const t of p.data.tags ?? []) tagMap.set(t, (tagMap.get(t) ?? 0) + 1);
+const tags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="标签">
+  <h1>标签</h1>
+  {tags.length === 0 ? (
+    <p class="empty">还没有任何标签。</p>
+  ) : (
+    <div class="cloud">
+      {tags.map(([t, n]) => <a class="pill" href={`/tags/${encodeURIComponent(t)}`}>#{t} ({n})</a>)}
+    </div>
+  )}
+  <p style="margin-top:32px"><a href="/">← 返回首页</a></p>
+</BaseLayout>
+
+<style>
+  h1 { font-size: 30px; margin: 0 0 18px; }
+  .cloud { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cloud .pill { font-size: 14px; padding: 6px 12px; }
+</style>
